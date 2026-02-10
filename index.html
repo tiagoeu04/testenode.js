@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Uma Pergunta Especial</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(180deg, #fff0f5, #ffe4ec);
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background: rgba(255,255,255,0.95);
+  padding: 30px;
+  border-radius: 22px;
+  width: 90%;
+  max-width: 430px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  animation: fade 0.8s ease;
+  z-index: 2;
+}
+
+.hidden {
+  display: none;
+}
+
+h1 {
+  color: #c2185b;
+}
+
+p {
+  color: #555;
+  line-height: 1.4;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  padding: 12px 26px;
+  font-size: 16px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+#sim {
+  background: #ff6f91;
+  color: white;
+}
+
+#nao {
+  background: #eee;
+  position: relative;
+}
+
+.options button {
+  width: 100%;
+  margin: 8px 0;
+  background: #ffb6c1;
+  color: white;
+}
+
+img, video {
+  width: 100%;
+  border-radius: 15px;
+  margin-top: 15px;
+}
+
+.flower {
+  position: fixed;
+  top: -40px;
+  animation: fall linear forwards;
+  z-index: 1;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes fade {
+  from {opacity: 0; transform: scale(0.9);}
+  to {opacity: 1; transform: scale(1);}
+}
+
+/* BRILHO */
+.glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  animation: glowEffect 1s ease-out;
+  pointer-events: none;
+  z-index: 999;
+}
+
+@keyframes glowEffect {
+  0% {opacity: 0;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.sparkle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: pink;
+  border-radius: 50%;
+  animation: sparkle 1s ease-out forwards;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes sparkle {
+  to {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HOME -->
+<div class="container" id="home">
+  <h1>Estou treinando uma linguagem nova</h1>
+  <p>
+    Estou aprendendo Node.js, mas isso aqui é front-end.<br>
+    Não sou muito bom nessa parte ainda, então se tiver algum bug… desculpa.
+    <br><br>
+    <strong>Você gostou de sair comigo?</strong>
+  </p>
+
+  <div class="buttons">
+    <button id="sim">Sim</button>
+    <button id="nao">Não</button>
+  </div>
+
+  <p style="margin-top:15px;">não clique no não em haha</p>
+</div>
+
+<!-- GAME -->
+<div class="container hidden" id="game">
+  <h1>Um desafio</h1>
+  <p>Quando eu saí com você, acerte o detalhe que mais me chamou atenção</p>
+
+  <div class="options">
+    <button>sorriso</button>
+    <button>corpo</button>
+    <button>roupa</button>
+    <button data-correct="true">olhos</button>
+    <button>jeito</button>
+  </div>
+</div>
+
+<!-- DICA -->
+<div class="container hidden" id="dica">
+  <h1>Dica</h1>
+  <img src="ela.jpg">
+  <p>
+    Essa é a dica.<br>
+    Algo que sempre me chama atenção<br>
+    e olha que mexe comigo.
+  </p>
+  <button id="voltarDica">Voltar</button>
+</div>
+
+<!-- FINAL -->
+<div class="container hidden" id="final">
+  <h1>💗</h1>
+
+  <video controls>
+    <source src="video.mp4" type="video/mp4">
+  </video>
+
+  <p style="margin-top:15px;">
+    Obrigado por ter saído comigo. Aquele dia foi leve, sincero e especial pra mim.
+    As conversas, as risadas e os momentos antes de você ir embora
+    ficaram guardados de um jeito muito bom.
+    <br><br>
+    Você estava linda, de um jeito natural.
+    Mesmo com o susto do quase acidente,
+    tudo valeu a pena só pra conseguir te entregar o buquê.
+    <br><br>
+    Se eu tivesse que escolher um detalhe,
+    seriam seus olhos. Eles foram o que mais me encantou
+    e continuam comigo até agora.
+  </p>
+
+  <button id="voltarFinal">Voltar</button>
+</div>
+
+<!-- EASTER EGG -->
+<div class="container hidden" id="easter">
+  <h1>ops…</h1>
+  <p>antes de voltar toma isso aqui pra você</p>
+  <img src="gatinho.png">
+  <button id="voltarHome">Agora sim 😄</button>
+</div>
+
+<script>
+const home = document.getElementById('home');
+const game = document.getElementById('game');
+const dica = document.getElementById('dica');
+const final = document.getElementById('final');
+const easter = document.getElementById('easter');
+
+const btnNao = document.getElementById('nao');
+const btnSim = document.getElementById('sim');
+const voltarDica = document.getElementById('voltarDica');
+const voltarFinal = document.getElementById('voltarFinal');
+const voltarHome = document.getElementById('voltarHome');
+
+/* NÃO FUGINDO */
+btnNao.addEventListener('click', () => {
+  btnNao.style.transition = '0.12s';
+  btnNao.style.transform = `translate(${Math.random()*320-160}px, ${Math.random()*220-110}px) rotate(${Math.random()*30-15}deg)`;
+});
+
+/* SIM COM BRILHO */
+btnSim.addEventListener('click', () => {
+  const glow = document.createElement('div');
+  glow.className = 'glow';
+  document.body.appendChild(glow);
+  setTimeout(() => glow.remove(), 1000);
+
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.style.left = '50vw';
+    s.style.top = '50vh';
+    s.style.setProperty('--x', `${Math.random()*300-150}px`);
+    s.style.setProperty('--y', `${Math.random()*300-150}px`);
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+
+  setTimeout(() => {
+    home.classList.add('hidden');
+    game.classList.remove('hidden');
+  }, 500);
+});
+
+/* JOGO */
+document.querySelectorAll('.options button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    game.classList.add('hidden');
+    btn.dataset.correct ? final.classList.remove('hidden') : dica.classList.remove('hidden');
+  });
+});
+
+/* VOLTARES */
+voltarDica.onclick = () => {
+  dica.classList.add('hidden');
+  game.classList.remove('hidden');
+};
+
+voltarFinal.onclick = () => {
+  final.classList.add('hidden');
+  easter.classList.remove('hidden');
+};
+
+voltarHome.onclick = () => {
+  easter.classList.add('hidden');
+  home.classList.remove('hidden');
+};
+
+/* FLORES */
+function criarFlor() {
+  const flor = document.createElement('div');
+  flor.className = 'flower';
+  flor.innerHTML = '🌸';
+  flor.style.left = Math.random()*100 + 'vw';
+  flor.style.fontSize = 18 + Math.random()*22 + 'px';
+  flor.style.animationDuration = 4 + Math.random()*3 + 's';
+  document.body.appendChild(flor);
+  setTimeout(() => flor.remove(), 9000);
+}
+setInterval(criarFlor, 250);
+</script>
+
+</body>
+</html>
